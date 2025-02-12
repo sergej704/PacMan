@@ -1003,9 +1003,17 @@ def game_loop_hard():
 
         # Kamera erstellen
         camera = Camera(screen_width, screen_height, map_width, map_height)
+        
+        # Musikdateien
+        music_tracks = ["gamemusic_hard.mp3", "gamemusic_hard2.mp3", "gamemusic_hard3.mp3", "gamemusic_hard4.mp3", "gamemusic_hard5.mp3", "gamemusic_hard6.mp3", "gamemusic_hard7.mp3", "gamemusic_hard8.mp3", "gamemusic_hard9.mp3", "gamemusic_hard10.mp3"]
+        current_track = 0  # Start mit case1.mp3
 
-        pygame.mixer.music.load(os.path.join(music_path, "gamemusic_hard.mp3"))
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(os.path.join(music_path, music_tracks[current_track]))
         pygame.mixer.music.play(-1, 0.0)
+
+        #pygame.mixer.music.load(os.path.join(music_path, "gamemusic_hard.mp3"))
+        #pygame.mixer.music.play(-1, 0.0)
 
         pacman_animation_index = 0
         animation_timer = 0
@@ -1037,7 +1045,12 @@ def game_loop_hard():
                                 pacman_speed = [1, 0]
                                 pacman_direction = "right"
                             if event.key == pygame.K_RETURN:  
-                                game_won = True  
+                                game_won = True
+                            if event.key == pygame.K_1:  # Musik mit Taste 1 wechseln
+                                current_track = (current_track + 1) % len(music_tracks)  # Nächstes Lied wählen
+                                pygame.mixer.music.stop()
+                                pygame.mixer.music.load(os.path.join(music_path, music_tracks[current_track]))
+                                pygame.mixer.music.play(-1, 0.0)  # Endlos abspielen  
 
                     # Pacman bewegen
                     new_pos = [pacman_pos[0] + pacman_speed[0], pacman_pos[1] + pacman_speed[1]]
@@ -1183,8 +1196,12 @@ def cscase():
     background_image = pygame.image.load(os.path.join(directory, "case.png"))
     background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
+    # Musikdateien
+    music_tracks = ["case1.mp3", "case2.mp3", "case3.mp3"]
+    current_track = 0  # Start mit case1.mp3
+
     pygame.mixer.music.stop()
-    pygame.mixer.music.load(os.path.join(music_path, "case.mp3"))
+    pygame.mixer.music.load(os.path.join(music_path, music_tracks[current_track]))
     pygame.mixer.music.play(-1, 0.0)
 
     spin_music = pygame.mixer.Sound(os.path.join(music_path, "spin.mp3"))
@@ -1205,6 +1222,12 @@ def cscase():
                     running = False  # Beende die Schleife
                     return  # Verlasse die Funktion sauber, ohne pygame zu beenden
 
+                if event.key == pygame.K_1:  # Musik mit Taste 1 wechseln
+                    current_track = (current_track + 1) % len(music_tracks)  # Nächstes Lied wählen
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load(os.path.join(music_path, music_tracks[current_track]))
+                    pygame.mixer.music.play(-1, 0.0)  # Endlos abspielen
+
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -1216,6 +1239,8 @@ def cscase():
         screen.blit(text, (screen_width // 2 - text.get_width() // 2, screen_height - 70))
         text = font.render("ESC - quit", True, (255, 255, 255))
         screen.blit(text, (screen_width // 2 - text.get_width() // 2, screen_height - 35))
+        text = font.render("1 - music", True, (255, 255, 255))
+        screen.blit(text, (screen_width // 14 - text.get_width() // 2, screen_height - 35))
 
         if won_item:
             name, color = won_item
