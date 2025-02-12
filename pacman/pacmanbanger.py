@@ -523,6 +523,10 @@ def end_screen():
         print("Fehler: Video konnte nicht geladen werden.")
         return
 
+    # Bestimme die FPS des Videos
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    clock = pygame.time.Clock()
+
     # Prozentsätze für Skalierung
     scale_percent_text = 0.14
     scale_percent_button = 0.05
@@ -532,7 +536,7 @@ def end_screen():
     font_size_text = int(screen_height * scale_percent_text)
     font = pygame.font.Font(None, font_size_text)
     text = font.render("end", True, WHITE)
-    
+
     text_x = screen_width // 2 - text.get_width() // 2
     text_y = screen_height * 0.42
 
@@ -552,7 +556,7 @@ def end_screen():
     while True:
         ret, frame = cap.read()
         if not ret:
-            break
+            break  # Video zu Ende
 
         # Konvertiere das OpenCV-Bild in ein Pygame-Bild
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -595,7 +599,7 @@ def end_screen():
                     cap.release()
                     return "menu"
 
-        pygame.time.delay(30)  # Kontrolliere die Abspielgeschwindigkeit des Videos
+        clock.tick(fps)  # Synchronisiert das Video mit der ursprünglichen Framerate
 
     cap.release()
     return "menu"
@@ -1233,14 +1237,14 @@ def cscase():
                     sys.exit()
 
         screen.blit(background_image, (0, 0))
-        text = font.render("SPACE - open Case", True, (255, 255, 255))
+        text = font.render("SPACE - open case", True, (255, 255, 255))
         screen.blit(text, (screen_width // 2 - text.get_width() // 2, screen_height - 105))
         text = font.render("Q - back", True, (255, 255, 255))
         screen.blit(text, (screen_width // 2 - text.get_width() // 2, screen_height - 70))
         text = font.render("ESC - quit", True, (255, 255, 255))
         screen.blit(text, (screen_width // 2 - text.get_width() // 2, screen_height - 35))
         text = font.render("1 - music", True, (255, 255, 255))
-        screen.blit(text, (screen_width // 14 - text.get_width() // 2, screen_height - 35))
+        screen.blit(text, (screen_width // 3 - text.get_width() // 2, screen_height - 35))
 
         if won_item:
             name, color = won_item
